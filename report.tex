@@ -1,0 +1,412 @@
+% ----
+% COMP1204 CW2 Report Document
+% ----
+\documentclass[]{article}
+\usepackage[margin=1in]{geometry}\usepackage{graphicx}\usepackage{wasysym}\usepackage{longtable}\usepackage{booktabs}\usepackage{lscape}\usepackage{enumitem}\usepackage{ffcode}\usepackage{minitoc}
+\title{COMP1204: Data Management \\ Coursework Two: Coronavirus Data Analysis}
+\author{Shaho Zagrosi \\ 33381836}
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+\section{The Relational Model}
+\subsection{EX1}
+The relation of the coronavirus dataset being studied in this report (\verb|dataset.csv|) is as follows: \begin{ffcode}
+dataset(dateRep, day, month, year, cases, deaths, countriesAndTerritories, geoId, countryterritoryCode, popData2020, continentExp)
+\end{ffcode}
+\noindent
+Each attribute and their respective relations are presented in the table below.
+\begin{longtable}[c]{@{}lr@{}}
+\toprule
+Relation                                       & \multicolumn{1}{l}{Relation Type} \\* \midrule
+\endfirsthead
+%
+\multicolumn{2}{c}%
+{{\bfseries Table \thetable\ continued from previous page}} \\
+\toprule
+Relation                                       & \multicolumn{1}{l}{Relation Type} \\* \midrule
+\endhead
+%
+\bottomrule
+\endfoot
+%
+\endlastfoot
+%
+dateRep → day                                  & One → Many                        \\
+dateRep → month                                & One → Many                        \\
+dateRep → year                                 & One → Many                        \\
+dateRep → cases                                & Many → Many                       \\
+dateRep → deaths                               & Many → Many                       \\
+dateRep → countriesAndTerritories              & Many → Many                       \\
+dateRep → geoId                                & Many → Many                       \\
+dateRep → countryterritoryCode                 & Many → Many                       \\
+dateRep → popData2020                          & Many → Many                       \\
+dateRep → continentExp                         & Many → Many                       \\
+day → month                                    & Many → Many                       \\
+day → year                                     & Many → Many                       \\
+day → cases                                    & Many → Many                       \\
+day → deaths                                   & Many → Many                       \\
+day → countriesAndTerritories                  & Many → Many                       \\
+day → geoId                                    & Many → Many                       \\
+day → countryterritoryCode                     & Many → Many                       \\
+day → popData2020                              & Many → Many                       \\
+day → continentExp                             & One → Many                        \\
+month → year                                   & Many → Many                       \\
+month → cases                                  & Many → Many                       \\
+month → deaths                                 & Many → Many                       \\
+month → countriesAndTerritories                & Many → Many                       \\
+month → geoId                                  & Many → Many                       \\
+month → countryterritoryCode                   & Many → Many                       \\
+month → popData2020                            & Many → Many                       \\
+month → continentExp                           & One → Many                        \\
+year → cases                                   & Many → Many                       \\
+year → deaths                                  & Many → Many                       \\
+year → countriesAndTerritories                 & Many → Many                       \\
+year → geoId                                   & Many → Many                       \\
+year → countryterritoryCode                    & Many → Many                       \\
+year → popData2020                             & Many → Many                       \\
+year → continentExp                            & One → Many                        \\
+cases → deaths                                 & Many → Many                       \\
+cases → countryterritoryCode                   & Many → Many                       \\
+cases → geoId                                  & Many → Many                       \\
+cases → popData2020                            & Many → Many                       \\
+cases → continentExp                           & One → Many                        \\
+deaths → countriesAndTerritories               & Many → Many                       \\
+deaths → geoId                                 & Many → Many                       \\
+deaths → countryterritoryCode                  & Many → Many                       \\
+deaths → popData2020                           & Many → Many                       \\
+deaths → continentExp                          & One → Many                        \\
+countriesAndTerritories → geoId                & One → One                         \\
+countriesAndTerritories → countryterritoryCode & One → One                         \\
+countriesAndTerritories → continentExp         & One → Many                        \\
+geoId → countryterritoryCode                   & One → One                         \\
+geoId → popData2020                            & One → One                         \\
+geoId → continentExp                           & One → Many                        \\
+countryterritoryCode → popData2020             & One → One                         \\
+countryterritoryCode → continentExp            & One → Many                        \\
+popData2020 → continentExp                     & One → Many                        \\* \bottomrule
+\end{longtable}
+\noindent
+SQLite data types in this dataset are presented in the table below.
+\begin{longtable}[c]{@{}ll@{}}
+\toprule
+Attribute               & Attribute Type    \\* \midrule
+\endfirsthead
+%
+\multicolumn{2}{c}%
+{{\bfseries Table \thetable\ continued from previous page}} \\
+\toprule
+Attribute               & Attribute Type    \\* \midrule
+\endhead
+%
+\bottomrule
+\endfoot
+%
+\endlastfoot
+%
+dateRep                 & TEXT    \\
+day                     & INTEGER \\
+month                   & INTEGER \\
+year                    & INTEGER \\
+cases                   & INTEGER \\
+deaths                  & INTEGER \\
+countriesAndTerritories & TEXT    \\
+geoId                   & TEXT    \\
+countryterritoryCode    & TEXT    \\
+popData2020             & INTEGER \\
+continentExp            & TEXT    \\* \bottomrule
+\end{longtable}
+
+\subsection{EX2}
+\subsubsection{Functional Dependencies}
+The following functional dependencies are identified within the dataset:
+\begin{enumerate}[label=\textbf{FD\arabic*.}]
+    \item Attribute \textit{dateRep}, Attribute \textit{countriesAndTerritories} $\rightarrow$ Attribute \textit{cases} (The combination of Attributes \textit{dateRep} and \textit{countriesAndTerritories} functionally determines Attribute \textit{cases})
+    \item Attribute \textit{dateRep}, Attribute \textit{countriesAndTerritories} $\rightarrow$ Attribute \textit{deaths} (The combination of Attributes \textit{dateRep} and \textit{countriesAndTerritories} functionally determines Attribute \textit{deaths})
+    \item Attribute \textit{dateRep}, Attribute \textit{countryterritoryCode} $\rightarrow$ Attribute \textit{cases} (The combination of Attributes \textit{dateRep} and \textit{countryterritoryCode} functionally determines Attribute \textit{cases})
+    \item Attribute \textit{dateRep}, Attribute \textit{countryterritoryCode} $\rightarrow$ Attribute \textit{deaths} (The combination of Attributes \textit{dateRep} and \textit{countryterritoryCode} functionally determines Attribute \textit{deaths})
+    \item Attribute \textit{date}, Attribute \textit{month}, Attribute \textit{year} $\rightarrow$ Attribute \textit{dateRep} (The combination of Attributes \textit{date}, \textit{month}, and \textit{year} functionally determines Attribute \textit{dateRep})
+    \item Attribute \textit{dateRep}, Attribute \textit{geoId} $\rightarrow$ Attribute \textit{cases} (The combination of Attributes \textit{dateRep} and \textit{geoId} functionally determines Attribute \textit{cases})
+    \item Attribute \textit{dateRep}, Attribute \textit{countryterritoryCode} $\rightarrow$ Attribute \textit{deaths} (The combination of Attributes \textit{dateRep} and \textit{countryterritoryCode} functionally determines Attribute \textit{deaths})
+    \item Attribute \textit{dateRep} $\rightarrow$ Attribute \textit{day} (The combination of Attributes \textit{dateRep} functionally determines Attribute \textit{day})
+    \item Attribute \textit{dateRep} $\rightarrow$ Attribute \textit{month} (The combination of Attributes \textit{dateRep} functionally determines Attribute \textit{month})
+    \item Attribute \textit{dateRep} $\rightarrow$ Attribute \textit{year} (The combination of Attributes \textit{dateRep} functionally determines Attribute \textit{year})
+    \item Attribute \textit{countriesAndTerritories} $\rightarrow$ Attribute \textit{continentExp} (Attribute \textit{countriesAndTerritories} functionally determines Attribute \textit{continentExp})
+    \item Attribute \textit{countriesAndTerritories} $\rightarrow$ Attribute \textit{popData2020} (Attribute \textit{countriesAndTerritories} functionally determines Attribute \textit{popData2020})
+    \item Attribute \textit{countryterritoryCode} $\rightarrow$ Attribute \textit{continentExp} (Attribute \textit{countryterritoryCode} functionally determines Attribute \textit{continentExp})
+    \item Attribute \textit{countryTerritoryCode} $\rightarrow$ Attribute \textit{geoId} (The combination of Attributes \textit{countryTerritoryCode} functionally determines Attribute \textit{geoId})
+    \item Attribute \textit{countryTerritoryCode} $\rightarrow$ Attribute \textit{popData2020} (The combination of Attributes \textit{countryTerritoryCode} functionally determines Attribute \textit{popData2020})
+    \item Attribute \textit{geoId} $\rightarrow$ Attribute \textit{continentExp} (Attribute \textit{geoId} functionally determines Attribute \textit{continentExp})
+    \item Attribute \textit{geoId} $\rightarrow$ Attribute \textit{popData2020} (The combination of Attributes \textit{geoId} functionally determines Attribute \textit{popData2020})
+\end{enumerate}
+
+\subsubsection{Assumptions}
+Below is a list of assumptions about the dataset and its functional dependencies:
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+    \item Each attribute in the dataset has a defined domain, all values adhering to the domain constraints.
+    \item Missing values are explicitly marked as NULL.
+    \item Each tuple in the dataset is unique.
+    \item Attributes cannot be further decomposed into smaller meaningful attributes.
+\end{enumerate}
+\subsection{EX3}
+The candidate keys identified in this dataset are presented in the table below.
+\begin{longtable}[c]{@{}l@{}}
+\toprule
+Candidate Keys                            \\* \midrule
+\endfirsthead
+%
+\multicolumn{1}{c}%
+{{\bfseries Table \thetable\ continued from previous page}} \\
+\toprule
+Candidate Keys                            \\* \midrule
+\endhead
+%
+\bottomrule
+\endfoot
+%
+\endlastfoot
+%
+dateRep, geoId                            \\
+dateRep, countryterritoryCode             \\
+dateRep, countriesAndTerritories          \\
+day, month, year, geoId                   \\
+day, month, year, countryterritoryCode    \\
+day, month, year, countriesAndTerritories \\* \bottomrule
+\end{longtable}
+\subsection{EX4}
+A suitable primary key for this table would be the combination of \verb|dateRep| and \verb|countryterritoryCode| as it uniquely identifies each record by combining the date of the report (\verb|dateRep|) with the standardized country territory code (\verb|countryterritoryCode|). This ensures that each row in the table corresponds to a specific report for a particular country on a given date, providing a unique identifier for each entry.
+\begin{longtable}[c]{@{}l@{}}
+\toprule
+Primary Key                   \\* \midrule
+\endfirsthead
+%
+\multicolumn{1}{c}%
+{{\bfseries Table \thetable\ continued from previous page}} \\
+\toprule
+Primary Key                   \\* \midrule
+\endhead
+%
+dateRep, countryterritoryCode \\* \bottomrule
+\end{longtable}
+\section{Normalisation}
+\subsection{EX5}
+\subsubsection{Partial Dependencies}
+\begin{enumerate}
+[label=\textbf{D\arabic*.}]
+    \item dateRep $\rightarrow$ day, month, year
+    \item countryterritoryCode $\rightarrow$ countriesAndTerritories, geoId, popData2020, continentExp
+\end{enumerate}
+\noindent
+Thus forming the final relation; \verb|dateRep|, \verb|countryterritoryCode| $\rightarrow$ cases, deaths.
+\subsection{EX6}
+The surrogate keys \verb|intDate| and \verb|intCountry| serve as unique identifiers for their respective entities. This decomposition process has successfully achieved 2nd Normal Form (2NF), as every non-key attribute is now fully dependent on the primary key.
+\begin{longtable}[c]{@{}lll@{}}
+\toprule
+Primary Key          & Surrogate Key & Key Type    \\* \midrule
+\endfirsthead
+%
+\multicolumn{3}{c}%
+{{\bfseries Table \thetable\ continued from previous page}} \\
+\toprule
+Primary Key          & Surrogate Key & Key Type    \\* \midrule
+\endhead
+%
+dateRep              & intDate       & INTEGER \\
+countryterritoryCode & intCountry    & INTEGER \\* \bottomrule
+\end{longtable}
+\subsection{EX7}
+In the newly decomposed relations, there are no transitive dependencies; each non-key attribute is directly dependent on the primary key of its respective relation.
+\subsection{EX8}
+\begin{enumerate}
+[label=\textbf{T\arabic*.}]
+    \item intDate $\rightarrow$ dateRep, day, month, year
+    \item intCountry $\rightarrow$ countryterritoryCode, countriesAndTerritories, geoId, popData2020, continentExp
+    \item intDate, intCountry $\rightarrow$ cases, deaths
+\end{enumerate}
+\noindent
+There are no transitive dependencies in the new relations, indicating that the decomposed relations are in 3rd Normal Form (3NF).
+\subsection{EX9}
+For the dates relation; the primary key, \verb|intDate|, is the only determinant. All other attributes are functionally dependent on \verb|intDate|, as \verb|intDate| is a super-key, the Dates relation is in BCNF. In the countries relation; \verb|intCountry| is the only determinant, all other attributes are functionally dependent on \verb|intCountry|. As \verb|intCountry| is a super-key, the countries relation is in BCNF. As for the final relation, the composite primary key (\verb|intDate|, \verb|intCountry|) is the only determinant, and both cases and deaths are functionally dependent on this composite key. As (\verb|intDate|, \verb|intCountry|) is a super-key, the final relation is in BCNF. As all three relations satisfy the BCNF conditions, it is possible to conclude that the decomposed relations are in Boyce-Codd Normal Form.
+\section{Modelling}
+\subsection{EX10}
+The raw dataset from \verb|dataset.csv| was imported into an SQLite database into a single table called '\verb|dataset|' within '\verb|coronavirus.db|', exporting the table structure and data as SQLite statements into '\verb|dataset.sql|'. This can later be used to recreate and populate the 'dataset' table in a fresh database.
+\begin{ffcode}
+sqlite3
+.mode csv
+.import dataset.csv dataset
+.output dataset.sql
+.dump
+sqlite3 coronavirus.db
+sqlite3 coronavirus.db < dataset.sql
+\end{ffcode}
+\subsection{EX11}
+Appropriate data types, indexes, and foreign key constraints were included. Data from \verb|dataset| were filtered into \verb|filteredDataset| to ensure only entries without \verb|null| fields were selected.
+\begin{ffcode}
+CREATE TABLE IF NOT EXISTS CountryInfo (
+    intCountry INTEGER PRIMARY KEY,
+    countriesAndTerritories TEXT NOT NULL UNIQUE,
+    geoId TEXT UNIQUE,
+    countryterritoryCode TEXT UNIQUE,
+    popData2020 INTEGER NOT NULL,
+    continentExp TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS DateInfo (
+    intDate INTEGER PRIMARY KEY,
+    dateRep TEXT NOT NULL UNIQUE,
+    day INTEGER NOT NULL,
+    month INTEGER NOT NULL,
+    year INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS CaseInfo (
+    intDate INTEGER,
+    intCountry INTEGER,
+    cases INTEGER,
+    deaths INTEGER,
+    PRIMARY KEY (intDate, intCountry),
+    FOREIGN KEY (intDate) REFERENCES DateInfo(intDate)
+        ON DELETE CASCADE
+        ON UPDATE NO ACTION,
+    FOREIGN KEY (intCountry) REFERENCES CountryInfo(intCountry)
+        ON DELETE CASCADE
+        ON UPDATE NO ACTION
+);
+\end{ffcode}
+\noindent
+The following commands were executed in terminal:
+\begin{ffcode}
+sqlite3 coronavirus.db < ex11.sql
+.output dataset2.sql
+.dump
+\end{ffcode}
+\noindent
+Indexes were created on the surrogate keys \verb|intDate| and \verb|intCountry|. Foreign key constraints were also defined for tables referencing these surrogate keys.
+\subsection{EX12}
+The comments in the code below explain respective processes in populating each of the tables.
+\begin{ffcode}
+-- Populate the DateInfo table
+INSERT OR IGNORE INTO CalendarInfo (dateRep, day, month, year)
+SELECT
+    filteredDataset.dateRep,
+    filteredDataset.day,
+    filteredDataset.month,
+    filteredDataset.year
+FROM (
+    SELECT * FROM dataset
+    WHERE cases IS NOT NULL AND deaths IS NOT NULL AND cases >= 0 AND deaths >= 0
+) AS filteredDataset;
+
+-- Populate the Country table
+INSERT OR IGNORE INTO CountryInfo (countriesAndTerritories, geoId, countryterritoryCode, popData2020, continentExp)
+SELECT
+    filteredDataset.countriesAndTerritories,
+    filteredDataset.geoId,
+    filteredDataset.countryterritoryCode,
+    filteredDataset.popData2020,
+    filteredDataset.continentExp
+FROM (
+    SELECT * FROM dataset
+    WHERE cases IS NOT NULL AND deaths IS NOT NULL AND cases >= 0 AND deaths >= 0
+) AS filteredDataset;
+
+-- Populate the CaseInfo table
+INSERT INTO CaseInfo (intDate, intCountry, cases, deaths)
+SELECT
+    CalendarInfo.intDate AS intDate,
+    CountryInfo.intCountry AS intCountry,
+    filteredDataset.cases,
+    filteredDataset.deaths
+FROM (
+    SELECT * FROM dataset
+    WHERE cases IS NOT NULL AND deaths IS NOT NULL AND cases >= 0 AND deaths >= 0
+) AS filteredDataset
+INNER JOIN CalendarInfo ON CalendarInfo.dateRep = filteredDataset.dateRep
+INNER JOIN CountryInfo ON CountryInfo.countriesAndTerritories = filteredDataset.countriesAndTerritories;
+\end{ffcode}
+\subsection{EX13}
+The following commands were executed, resulting in a fully populated and normalised SQLite database.
+\begin{ffcode}
+sqlite3 coronavirus.db < dataset.sql
+sqlite3 coronavirus.db < ex11.sql
+sqlite3 coronavirus.db < ex12.sql
+\end{ffcode}
+\section{Querying}
+\subsection{EX14}
+Accumulate cases and deaths in CaseInfo and cast the result as an \verb|INTEGER|.
+\begin{ffcode}
+SELECT SUM(cases) AS "sum cases", SUM(deaths) as "sum deaths" FROM CaseInfo;
+\end{ffcode}
+\subsection{EX15}
+Ordering by the date variables (\verb|year|, \verb|month|, \verb|day|), inner joining \verb|intDate| and \verb|intCountry| from their respective tables, filtering only entries with the \verb|geoId| of \verb|UK|.
+
+\begin{ffcode}
+SELECT
+    CalendarInfo.dateRep,
+    CaseInfo.cases
+FROM CaseInfo
+INNER JOIN CalendarInfo ON CalendarInfo.intDate = CaseInfo.intDate
+INNER JOIN CountryInfo ON CountryInfo.intCountry = CaseInfo.intCountry
+WHERE CountryInfo.geoId = 'UK'
+ORDER BY year, month, day;
+\end{ffcode}
+\subsection{EX16}
+Ordering by the country variable first (\verb|intCountry|) and the date variable second (\verb|intDate|), inner joining \verb|intDate| and \verb|intCountry|, selecting \verb|countriesAndTerritories|, \verb|dateRep|, \verb|cases|, and \verb|deaths|, to show the number of cases and deaths by date and country.
+\begin{ffcode}
+SELECT
+    CountryInfo.countriesAndTerritories,
+    CalendarInfo.dateRep,
+    CaseInfo.cases,
+    CaseInfo.deaths
+FROM CaseInfo
+INNER JOIN CalendarInfo ON CalendarInfo.intDate = CaseInfo.intDate
+INNER JOIN CountryInfo ON CountryInfo.intCountry = CaseInfo.intCountry
+ORDER BY CaseInfo.intCountry ASC, CaseInfo.intDate ASC;
+\end{ffcode}
+\subsection{EX17}
+Ordering by the country variable first (\verb|countriesAndTerritories|), taking a sum of the cases and deaths, dividing each dataset by the country's respective population variable (\verb|popData2020|). The percentage value is converted to a floating point value in the process due to dividing by \verb|100.0|.
+\begin{ffcode}
+SELECT
+    CountryInfo.countriesAndTerritories,
+    (SUM(CaseInfo.cases) * 100.0 / CountryInfo.popData2020) AS cases_percentage,
+    (SUM(CaseInfo.deaths) * 100.0 / CountryInfo.popData2020) AS deaths_percentage
+FROM CaseInfo
+INNER JOIN CountryInfo ON CountryInfo.intCountry = CaseInfo.intCountry
+GROUP BY CountryInfo.countriesAndTerritories, CountryInfo.popData2020
+ORDER BY CountryInfo.countriesAndTerritories;
+\end{ffcode}
+\subsection{EX18}
+Ordering by the whole dataset's death rate (\verb|death_rate|) in descending order and limiting to the top \verb|10| results, a table is produced with the countries and their respective death rates.
+\begin{ffcode}
+SELECT
+    CountryInfo.countriesAndTerritories,
+    (SUM(CaseInfo.deaths) * 100.0 / SUM(CaseInfo.cases)) AS death_rate
+FROM CaseInfo
+INNER JOIN CountryInfo ON CountryInfo.intCountry = CaseInfo.intCountry
+GROUP BY CountryInfo.countriesAndTerritories
+ORDER BY death_rate DESC
+LIMIT 10;
+\end{ffcode}
+\subsection{EX19}
+Using Window Functions in SQLite to calculate the cumulative totals, ordered by date.
+\begin{ffcode}
+WITH UK_Data AS (
+    SELECT
+        CalendarInfo.dateRep,
+        CaseInfo.deaths,
+        CaseInfo.cases
+    FROM CaseInfo
+    INNER JOIN CountryInfo ON CaseInfo.intCountry = CountryInfo.intCountry
+    INNER JOIN CalendarInfo ON CaseInfo.intDate = CalendarInfo.intDate
+    WHERE CountryInfo.geoId = 'UK'
+)
+SELECT
+    dateRep,
+    SUM(deaths) OVER (ORDER BY dateRep) AS cumulative_deaths,
+    SUM(cases) OVER (ORDER BY dateRep) AS cumulative_cases
+FROM UK_Data;
+\end{ffcode}
+\end{document}

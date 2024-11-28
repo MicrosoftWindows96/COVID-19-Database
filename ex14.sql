@@ -1,0 +1,1 @@
+SELECT SUM(cases) AS "sum cases", SUM(deaths) as "sum deaths" FROM CaseInfo;
